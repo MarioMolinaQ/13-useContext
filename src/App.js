@@ -1,23 +1,35 @@
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
 import './App.css';
+import { PruebaContext } from './context/PruebaContext';
+import { AppRouter } from './routing/AppRouter';
 
 function App() {
+
+  const [usuario, setUsuario] = useState({});
+
+  useEffect(() => {
+    // La primera vez que se carga el componente
+    let usuario_local = JSON.parse(localStorage.getItem("usuario"));
+    
+    setUsuario(usuario_local);
+  },[]);
+  
+  useEffect(() => {
+    //Cuando se modifica el usuario
+    localStorage.setItem("usuario", JSON.stringify(usuario));
+    
+  },[usuario]);
+
+  const curso = {
+    id:1,
+    titulo :"Master en typescript",
+    contenido:"muchas horas de contenido"
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <PruebaContext.Provider value ={{usuario, setUsuario}}>
+          <AppRouter />
+        </PruebaContext.Provider>
     </div>
   );
 }
